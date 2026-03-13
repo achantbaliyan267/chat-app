@@ -11,14 +11,15 @@ exports.searchUsers = async (req, res) => {
         }
       : {};
 
-    const users = (await User.find(keyword))
+    const users = await User.find(keyword)
       .find({ _id: { $ne: req.user } })
       .select("-password");
+    console.log("users:", users);
 
     res.json(users);
   } catch (err) {
     res.status(500).json({
-      message: err.message,
+      message: "Unable to search users",
     });
   }
 };
