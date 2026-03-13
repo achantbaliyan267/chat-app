@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
+// Defining User Schema
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      trim: true,
     },
 
     username: {
@@ -48,6 +48,7 @@ const userSchema = new mongoose.Schema(
       },
     ],
   },
+  // for Creation and updation of user
   { timestamps: true },
 );
 
