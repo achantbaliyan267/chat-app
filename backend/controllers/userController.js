@@ -165,20 +165,50 @@ exports.rejectFriendRequest = async (req, res) => {
 // Get Friends List
 exports.getFriendRequests = async (req, res) => {
   try {
+    // Get current user ID
     const currentUserId = req.user;
 
+    // Find current user in the database and populate friend requests with sender's name, email, and username
     const currentUser = await User.findById(currentUserId).populate(
       "friendRequests",
       "name email username",
     );
 
+    // Check if current user exists
     if (!currentUser) {
       return res.status(404).json({ message: "User not Found" });
     }
-    console.log("Current User:", currentUser);
-    const friendRequests = await currentUser.friendRequests;
-    console.log(friendRequests);
-    return res.json(friendRequests);
+
+    // Return the list of friend requests
+    return res.json(currentUser.friendRequests);
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// Get Friends List
+exports.getFriendsList = async (req, res) => {
+  try {
+    // Get current user ID
+    const currentUserId = req.user;
+
+    // Find current user in the database and populate friends with their name, username, and email
+    const currentUser = await User.findById(currentUserId).populate(
+      "friends",
+      "name username email",
+    );
+
+    // Check if current user exists
+    if (!currentUser) {
+      return res.status(404).json({
+        message: "User not Found",
+      });
+    }
+
+    // Return the list of friends
+    return res.json(currentUser.friends);
   } catch (err) {
     return res.status(500).json({
       message: err.message,
