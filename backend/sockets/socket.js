@@ -1,14 +1,13 @@
 const Message = require("../models/Message");
 
-const onlineUsers = {};
-
 const socketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
     socket.on("join", (userId) => {
-      onlineUsers[userId] = socket.id;
-      console.log("Online users:", onlineUsers);
+      socket.join(userId);
+
+      socket.broadcast.emit("userOnline", userId);
     });
 
     socket.on("sendMessage", async (data) => {
@@ -18,21 +17,32 @@ const socketHandler = (io) => {
         sender: senderId,
         receiver: receiverId,
         text,
+        status: "sent",
       });
 
-      const receiverSocketId = onlineUsers[receiverId];
+      io.to(receiverId).emit("receiveMessage", message);
+    });
 
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("receiveMessage", message);
-      }
+    socket.on("messageDelivered", async (messageId) => {
+      await Message.findByIdAndUpdate(messageId, {
+        status: "delivered",
+      });
+    });
+
+    socket.on("messageRead", async (messageId) => {
+      await Message.findByIdAndUpdate(messageId, {
+        status: "read",
+      });
     });
 
     socket.on("disconnect", () => {
-      for (let userId in onlineUsers) {
-        if (onlineUsers[userId] === socket.id) {
-          delete onlineUsers[userId];
+      const rooms = [...socket.rooms];
+
+      rooms.forEach((room) => {
+        if (room !== socket.id) {
+          socket.broadcast.emit("userOffline", room);
         }
-      }
+      });
 
       console.log("User disconnected:", socket.id);
     });
