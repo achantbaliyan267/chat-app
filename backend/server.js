@@ -7,7 +7,8 @@ const protect = require("./middleware/authMiddleware");
 const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const http = require("http");
-const { Server } = reuire("socket.io");
+const { Server } = require("socket.io");
+const socketHandler = require("./sockets/socket");
 
 // create express app
 const app = express();
@@ -33,14 +34,8 @@ const io = new Server.createServer(server, {
   },
 });
 
-// Socket.IO connection
-io.on("connection", (socket) => {
-  console.log("User connected: ", socket.id);
-
-  socket.on("disconnected", () => {
-    console.log("User disconnected: ", socket.id);
-  });
-});
+// Socket.IO connection handler
+socketHandler(io);
 
 // Auth Routes
 app.use("/api/auth", authRoutes);
