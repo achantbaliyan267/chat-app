@@ -2,7 +2,7 @@ import { useState } from "react";
 import API from "../services/api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center flex-col h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow w-96"
@@ -61,6 +61,12 @@ const Login = () => {
           Login
         </button>
       </form>
+      <Link
+        to="/signup"
+        className="block text-center mt-4 text-sm text-gray-600"
+      >
+        Don't have an account? Register
+      </Link>
     </div>
   );
 };
