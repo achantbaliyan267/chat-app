@@ -14,8 +14,15 @@ const ChatBox = ({ theme, isOnline }) => {
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
+  const containerRef = useRef(null);
+
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
   }, [messages, typingUsers]);
 
   const handleInputChange = (e) => {
@@ -78,7 +85,10 @@ const ChatBox = ({ theme, isOnline }) => {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar pb-10">
+      <div 
+        ref={containerRef}
+        className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar pb-10"
+      >
         {messages.map((msg, index) => {
           const isSender = msg.sender === user?._id || msg.sender?._id === user?._id;
           return (
