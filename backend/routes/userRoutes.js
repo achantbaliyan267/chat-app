@@ -8,6 +8,7 @@ const {
   rejectFriendRequest,
   getFriendRequests,
   getFriendsList,
+  uploadProfilePic,
 } = require("../controllers/userController");
 
 const protect = require("../middleware/authMiddleware");
@@ -29,5 +30,8 @@ router.get("/friend-requests", protect, getFriendRequests);
 
 // Get friends list route
 router.get("/friends", protect, getFriendsList);
+
+// Profile pic route
+router.put("/profile-pic", protect, uploadProfilePic);
 
 module.exports = router;

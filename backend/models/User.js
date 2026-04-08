@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    profilePic: {
+      type: String,
+      default: "",
+    },
+
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,

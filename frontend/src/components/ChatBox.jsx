@@ -84,8 +84,14 @@ const ChatBox = ({ theme }) => {
           return (
             <div key={index} className={`flex ${isSender ? "justify-end" : "justify-start"} animate-in fade-in duration-300`}>
               {(!isSender && activeChat) && (
-                <div className={`w-8 h-8 mr-3 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-auto ${theme === 'dark' ? 'bg-slate-700' : 'bg-blue-500'}`}>
-                    {activeChat.name.charAt(0).toUpperCase()}
+                <div className="mr-3 mt-auto shrink-0 transition-transform duration-300 hover:scale-105">
+                  {activeChat.profilePic ? (
+                    <img src={activeChat.profilePic} className="w-8 h-8 rounded-full object-cover ring-2 ring-transparent drop-shadow-md" alt="" />
+                  ) : (
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md ${theme === 'dark' ? 'bg-slate-700' : 'bg-blue-500'}`}>
+                        {activeChat.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
               )}
               
@@ -110,10 +116,16 @@ const ChatBox = ({ theme }) => {
         })}
         {isOtherTyping && (
            <div className="flex justify-start animate-in fade-in duration-300">
-             <div className={`w-8 h-8 mr-3 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-auto ${theme === 'dark' ? 'bg-slate-700' : 'bg-blue-500'}`}>
-                {activeChat.name.charAt(0).toUpperCase()}
+             <div className="mr-3 mt-auto shrink-0 transition-transform duration-300 hover:scale-105">
+                {activeChat.profilePic ? (
+                   <img src={activeChat.profilePic} className="w-8 h-8 rounded-full object-cover ring-2 ring-transparent drop-shadow-md" alt="" />
+                ) : (
+                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md ${theme === 'dark' ? 'bg-slate-700' : 'bg-blue-500'}`}>
+                      {activeChat.name.charAt(0).toUpperCase()}
+                   </div>
+                )}
              </div>
-             <div className={`px-4 py-3 rounded-2xl rounded-bl-sm flex items-center space-x-1 ${theme === 'dark' ? 'bg-slate-800' : 'bg-white border border-gray-100'}`}>
+             <div className={`px-4 py-3 rounded-2xl rounded-bl-sm flex items-center space-x-1 shadow-sm ${theme === 'dark' ? 'bg-slate-800' : 'bg-white border border-gray-100'}`}>
                 <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
                 <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
                 <div className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>

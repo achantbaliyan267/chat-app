@@ -218,3 +218,30 @@ exports.getFriendsList = async (req, res) => {
     });
   }
 };
+
+exports.uploadProfilePic = async (req, res) => {
+  try {
+    const userId = req.user;
+    const { profilePic } = req.body;
+
+    if (!profilePic) {
+      return res.status(400).json({ message: "Profile picture is required" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePic },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json(updatedUser);
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};

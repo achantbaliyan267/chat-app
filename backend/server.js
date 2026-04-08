@@ -23,7 +23,8 @@ connnectDB();
 app.use(cors());
 
 // Use Middleware to Parse req Body content
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Create HTTP server and Socket.IO server
 const server = http.createServer(app);
