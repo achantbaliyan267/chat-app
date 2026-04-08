@@ -46,15 +46,24 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20">
+    <div className="flex items-center justify-center min-h-[100dvh] bg-slate-950 p-4 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div className="w-full max-w-md p-8 sm:p-10 space-y-8 bg-slate-900/60 backdrop-blur-2xl rounded-3xl shadow-2xl border border-slate-800 z-10">
         <div className="text-center">
-          <h2 className="text-4xl font-extrabold text-white tracking-tight">Welcome Back</h2>
-          <p className="mt-2 text-indigo-100">Sign in to your account</p>
+          <div className="w-16 h-16 bg-blue-600/20 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner border border-blue-500/20">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          <h2 className="text-3xl font-extrabold text-white tracking-tight">Welcome Back</h2>
+          <p className="mt-2 text-slate-400">Sign in to your account</p>
         </div>
 
         {error && (
-          <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-100 text-sm font-medium text-center">
+          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm font-medium text-center">
             {error}
           </div>
         )}
@@ -67,7 +76,7 @@ const Login = () => {
                 placeholder="Username"
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
               />
             </div>
             <div>
@@ -77,23 +86,23 @@ const Login = () => {
                 placeholder="Password"
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200"
+                className="w-full px-4 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
               />
             </div>
           </div>
 
           <button 
             disabled={loading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold rounded-xl shadow-lg transform transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg transform transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {loading ? "Signing in..." : "Login"}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-indigo-100">
+        <p className="mt-8 text-center text-sm text-slate-400">
           Don't have an account?{" "}
-          <Link to="/signup" className="font-semibold text-white hover:text-pink-200 transition-colors">
-            Register now
+          <Link to="/signup" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
+            Create one
           </Link>
         </p>
       </div>

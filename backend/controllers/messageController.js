@@ -6,12 +6,12 @@ exports.sendMessage = async (req, res) => {
     // Get the reciverId from the request parameters and senderId from the authenticated user
     const reciverId = req.params.reciverId;
     const senderId = req.user;
-    const { text } = req.body;
+    const { text, image } = req.body;
 
     // Validate the input
-    if (!text) {
+    if (!text && !image) {
       return res.status(400).json({
-        message: "Text is required",
+        message: "Text or Image is required",
       });
     }
 
@@ -28,7 +28,8 @@ exports.sendMessage = async (req, res) => {
     const message = await Message.create({
       sender: senderId,
       reciver: reciverId,
-      text,
+      text: text || "",
+      image: image || "",
     });
 
     // Return the created message
