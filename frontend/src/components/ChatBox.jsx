@@ -4,7 +4,7 @@ import API from "../services/api";
 import { addMessage } from "../redux/chatSlice";
 import { socket } from "../socket/socket";
 
-const ChatBox = ({ theme }) => {
+const ChatBox = ({ theme, isOnline }) => {
   const dispatch = useDispatch();
   const { messages, activeChat, typingUsers } = useSelector((state) => state.chat);
   const user = useSelector((state) => state.auth?.user) || JSON.parse(localStorage.getItem("user"));
@@ -78,7 +78,7 @@ const ChatBox = ({ theme }) => {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar pb-10">
         {messages.map((msg, index) => {
           const isSender = msg.sender === user?._id || msg.sender?._id === user?._id;
           return (
@@ -96,7 +96,7 @@ const ChatBox = ({ theme }) => {
               )}
               
               <div 
-                className={`max-w-[75%] px-5 py-3 rounded-2xl shadow-sm text-[15px] leading-relaxed font-medium ${
+                className={`max-w-[75%] px-5 py-3 rounded-2xl shadow-sm text-[15px] leading-relaxed font-medium break-words ${
                   isSender 
                   ? "bg-blue-600 text-white rounded-br-sm" 
                   : (theme === 'dark' ? "bg-slate-800 text-slate-100 rounded-bl-sm" : "bg-white text-slate-800 rounded-bl-sm border border-gray-100")
@@ -107,8 +107,13 @@ const ChatBox = ({ theme }) => {
                 )}
                 {msg.text && <div>{msg.text}</div>}
                 
-                <div className={`text-[10px] mt-1 text-right opacity-60 ${isSender ? 'text-blue-100' : (theme === 'dark' ? 'text-slate-400' : 'text-slate-400')}`}>
-                  {new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div className={`text-[10px] mt-1 text-right opacity-70 flex items-center justify-end gap-1 ${isSender ? 'text-blue-200' : (theme === 'dark' ? 'text-slate-400' : 'text-slate-400')}`}>
+                  <span>{new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  {isSender && (
+                    <span className={`text-[13px] leading-none ${isOnline ? 'text-blue-300' : 'text-blue-200 opacity-70'}`}>
+                      {isOnline ? '✓✓' : '✓'}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
