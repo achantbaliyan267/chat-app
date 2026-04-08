@@ -10,17 +10,12 @@ const socketHandler = (io) => {
       socket.broadcast.emit("userOnline", userId);
     });
 
-    socket.on("sendMessage", async (data) => {
-      const { senderId, receiverId, text } = data;
-
-      const message = await Message.create({
-        sender: senderId,
-        receiver: receiverId,
-        text,
-        status: "sent",
-      });
-
-      io.to(receiverId).emit("receiveMessage", message);
+    socket.on("sendMessage", async (message) => {
+      // Message is already saved in the DB by the REST API, just forward it to the receiver's socket room
+      const receiverId = message.reciver || message.receiver;
+      if (receiverId) {
+         io.to(receiverId.toString()).emit("receiveMessage", message);
+      }
     });
 
     socket.on("messageDelivered", async (messageId) => {

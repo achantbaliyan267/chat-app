@@ -7,23 +7,22 @@ exports.signup = async (req, res) => {
   try {
     const { name, username, email, phone, password } = req.body;
 
-    // Checking user exists or not
+    // Check user exists
     const userExist = await User.findOne({
       $or: [{ email }, { username }],
     });
 
-    // If exist then
     if (userExist) {
-      return res.send(400).json({
+      return res.status(400).json({
         message: "User already exists",
       });
     }
 
-    //  If not Exists
+    // Hash password
     const salt = await bcrypt.genSalt(10);
-
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Create user
     const user = await User.create({
       name,
       username,
@@ -32,18 +31,25 @@ exports.signup = async (req, res) => {
       phone,
     });
 
-    // Creating JWT Token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECERT, {
-      expiresIn: "7d",
+    // Create token
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET, // ✅ FIXED
+      { expiresIn: "7d" }
+    );
+
+    // Remove password from response
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    return res.status(201).json({
+      token,
+      user: userObj,
+      message: "User Registered Successfully",
     });
 
-    res.status(201).json({
-      token,
-      user,
-      message: "User Registerd Successfully",
-    });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       message: err.message,
     });
   }
@@ -58,34 +64,36 @@ exports.login = async (req, res) => {
       $or: [{ username }, { email }],
     });
 
-    // If User not exists
+    // User not found
     if (!user) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "User not Found",
       });
     }
 
-    // If exists
+    // Check password
     const passMatch = await bcrypt.compare(password, user.password);
 
-    // If password not Match
     if (!passMatch) {
-      res.status(400).json({
-        message: "Invaild Credentaials",
+      return res.status(400).json({
+        message: "Invalid Credentials",
       });
     }
 
-    // If password Match
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECERT, {
-      expiresIn: "7d",
-    });
+    // Generate token
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET, // ✅ FIXED
+      { expiresIn: "7d" }
+    );
 
-    res.json({
+    return res.json({
       token,
       user,
     });
+
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       message: err.message,
     });
   }

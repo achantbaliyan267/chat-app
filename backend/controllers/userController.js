@@ -13,10 +13,13 @@ exports.searchUsers = async (req, res) => {
         }
       : {};
 
+    let query = keyword;
+    if (req.user) {
+      query._id = { $ne: req.user };
+    }
+
     // Find users matching the keyword, excluding the current user and selecting all fields except password
-    const users = await User.find(keyword)
-      .find({ _id: { $ne: req.user } })
-      .select("-password");
+    const users = await User.find(query).select("-password");
 
     res.json(users);
   } catch (err) {

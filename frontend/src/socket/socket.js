@@ -1,5 +1,8 @@
-import { io } from "soket.io-client";
+import { io } from "socket.io-client";
 
-export const socket = io("http://localhost:5000", {
+// Use environment variable for backend URL if in production (e.g. Render/Vercel)
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
+export const socket = io(BACKEND_URL, {
   autoConnect: false,
 });

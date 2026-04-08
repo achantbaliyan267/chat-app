@@ -54,9 +54,16 @@ app.get("/api/protected", protect, (req, res) => {
   });
 });
 
-// Start the server
+// Serve static files from the React frontend app
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
+
+// Triggering nodemon restart for user
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
