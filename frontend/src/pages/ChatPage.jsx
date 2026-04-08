@@ -72,7 +72,7 @@ const ChatPage = () => {
   const isTyping = activeChat && typingUsers.includes(activeChat._id);
 
   return (
-    <div className={`fixed inset-0 flex overflow-hidden transition-colors duration-500 w-full ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-gray-100 text-slate-900'} relative`}>
+    <div className={`flex w-full h-screen overflow-hidden transition-colors duration-500 relative ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-gray-100 text-slate-900'}`}>
       
       {/* 3D Background Decoration */}
       <div className={`absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[120px] pointer-events-none transition-all duration-700 ${theme === 'dark' ? 'bg-blue-600/20' : 'bg-blue-300/30'}`}></div>
