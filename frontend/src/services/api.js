@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Use environment variables for backend API URL
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://chat-app-backend-6hur.onrender.com";
 
 const API = axios.create({
   baseURL: `${BACKEND_URL}/api`,
