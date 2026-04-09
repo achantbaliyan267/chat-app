@@ -66,44 +66,37 @@ const ChatPage = () => {
   const isDark = theme === "dark";
 
   return (
-    <div className={`flex w-full h-screen overflow-hidden relative transition-colors duration-500 ${isDark ? 'bg-[#0a0f1e]' : 'bg-slate-100'}`}>
+    <div className={`flex w-full h-screen overflow-hidden relative transition-colors duration-500 ${isDark ? 'bg-[#0d1117]' : 'bg-[#f0f2f5]'}`}>
       
-      {/* Ambient background orbs */}
+      {/* Ambient orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className={`absolute -top-32 -left-32 w-80 h-80 rounded-full blur-3xl opacity-30 transition-all duration-700 ${isDark ? 'bg-blue-600' : 'bg-blue-300'}`} />
-        <div className={`absolute top-1/2 -right-32 w-72 h-72 rounded-full blur-3xl opacity-20 transition-all duration-700 ${isDark ? 'bg-violet-600' : 'bg-violet-300'}`} />
-        <div className={`absolute -bottom-24 left-1/3 w-64 h-64 rounded-full blur-3xl opacity-15 transition-all duration-700 ${isDark ? 'bg-cyan-500' : 'bg-sky-300'}`} />
+        <div className={`absolute -top-40 -left-20 w-96 h-96 rounded-full blur-[100px] opacity-20 ${isDark ? 'bg-blue-600' : 'bg-blue-300'}`} />
+        <div className={`absolute bottom-0 right-0 w-80 h-80 rounded-full blur-[100px] opacity-15 ${isDark ? 'bg-violet-600' : 'bg-violet-300'}`} />
       </div>
 
       {/* Sidebar */}
-      <div className={`${activeChat ? 'hidden md:flex' : 'flex'} flex-col shrink-0 w-full md:w-[300px] lg:w-[340px] h-full z-20 relative 
-        border-r ${isDark ? 'border-white/6 bg-slate-900/80 backdrop-blur-xl' : 'border-black/5 bg-white/80 backdrop-blur-xl'}`}>
+      <div className={`${activeChat ? 'hidden md:flex' : 'flex'} flex-col shrink-0 w-full md:w-[300px] lg:w-[340px] h-full z-20 relative
+        border-r ${isDark ? 'border-white/6 bg-[#161b27]/95 backdrop-blur-xl' : 'border-black/6 bg-white/95 backdrop-blur-xl'}`}>
         <Sidebar theme={theme} setTheme={setTheme} />
       </div>
 
       {/* Chat panel */}
       <div className={`${activeChat ? 'flex' : 'hidden md:flex'} flex-1 flex-col h-full min-w-0 relative z-10 md:p-3`}>
         {activeChat ? (
-          <div className={`flex-1 flex flex-col h-full overflow-hidden md:rounded-2xl border transition-all duration-300
-            ${isDark
-              ? 'bg-slate-900/70 backdrop-blur-2xl border-white/8 shadow-2xl shadow-black/40'
-              : 'bg-white/75 backdrop-blur-2xl border-black/6 shadow-2xl shadow-black/10'
-            }`}
-          >
-            {/* Chat Header — glassmorphism */}
-            <div className={`flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 shrink-0 border-b z-30
-              ${isDark
-                ? 'bg-slate-900/90 backdrop-blur-xl border-white/8'
-                : 'bg-white/90 backdrop-blur-xl border-black/6'
-              }`}
-            >
-              {/* Back button (mobile) */}
+          <div className={`flex-1 flex flex-col h-full overflow-hidden md:rounded-2xl border shadow-2xl
+            ${isDark ? 'bg-[#161b27]/90 border-white/6 backdrop-blur-xl' : 'bg-white/90 border-black/6 backdrop-blur-xl'}`}>
+
+            {/* Chat Header */}
+            <div className={`flex items-center gap-3 px-4 sm:px-5 py-3.5 shrink-0 border-b z-30
+              ${isDark ? 'bg-[#161b27]/95 border-white/6 backdrop-blur-xl' : 'bg-white/95 border-black/5 backdrop-blur-xl'}`}>
+
+              {/* Back (mobile) */}
               <button
                 onClick={handleBackToContacts}
-                className={`md:hidden p-2 rounded-xl transition-all hover:scale-105 active:scale-95 mr-1
-                  ${isDark ? 'bg-white/8 hover:bg-white/14 text-slate-300' : 'bg-black/5 hover:bg-black/10 text-slate-600'}`}
+                className={`md:hidden p-2 rounded-xl mr-1 transition-all hover:scale-105 active:scale-95
+                  ${isDark ? 'bg-white/6 hover:bg-white/10 text-slate-300' : 'bg-black/5 hover:bg-black/8 text-slate-600'}`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4.5 h-4.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
               </button>
@@ -111,51 +104,51 @@ const ChatPage = () => {
               {/* Avatar */}
               <div className="relative shrink-0">
                 {activeChat.profilePic
-                  ? <img src={activeChat.profilePic} className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shadow-md ring-2 ring-blue-500/30" alt="" />
-                  : <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md bg-gradient-to-br from-blue-500 to-indigo-600 ring-2 ring-blue-500/30">
+                  ? <img src={activeChat.profilePic} className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-blue-500/20 shadow" alt="" />
+                  : <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg ring-2 ring-blue-500/20 shadow">
                       {activeChat.name.charAt(0).toUpperCase()}
                     </div>
                 }
-                {isOnline && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full ring-2 ring-slate-900 animate-pulse shadow-sm" />
-                )}
+                {isOnline && <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 rounded-full ring-2 ring-[#161b27] animate-pulse" />}
               </div>
 
-              {/* Name + status */}
-              <div className="flex flex-col min-w-0 flex-1">
-                <h3 className={`font-bold text-[16px] sm:text-[17px] truncate leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              {/* Name / status */}
+              <div className="flex flex-col flex-1 min-w-0">
+                <h3 className={`font-bold text-[15px] sm:text-[16px] leading-tight truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   {activeChat.name}
                 </h3>
-                <p className={`text-xs font-medium truncate transition-all duration-300 ${
-                  isTyping ? 'text-blue-400 animate-pulse' : isOnline ? 'text-green-400' : (isDark ? 'text-slate-500' : 'text-slate-400')
-                }`}>
-                  {isTyping ? '● typing...' : isOnline ? '● Online' : '○ Offline'}
+                <p className={`text-xs font-medium transition-all ${isTyping ? 'text-blue-400 animate-pulse' : isOnline ? 'text-emerald-400' : isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                  {isTyping ? '● typing...' : isOnline ? '● Active now' : '○ Offline'}
                 </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all hover:scale-105 active:scale-95 ${isDark ? 'bg-white/6 hover:bg-white/10 text-slate-300' : 'bg-black/5 hover:bg-black/8 text-slate-600'}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                  </svg>
+                </button>
               </div>
             </div>
 
             <ChatBox theme={theme} isOnline={isOnline} />
           </div>
         ) : (
-          /* Empty state */
-          <div className={`flex-1 flex flex-col items-center justify-center h-full md:rounded-2xl border text-center p-8
-            ${isDark
-              ? 'bg-slate-900/60 backdrop-blur-2xl border-white/8'
-              : 'bg-white/70 backdrop-blur-2xl border-black/6'
-            }`}
-          >
-            <div className="relative w-24 h-24 mb-6">
-              <div className={`w-24 h-24 rounded-[28px] flex items-center justify-center shadow-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 ${isDark ? 'shadow-blue-900/50' : 'shadow-blue-200'}`}>
-                <div className="absolute inset-0 rounded-[28px] bg-gradient-to-tr from-white/10 to-transparent" />
-                <span className="text-5xl relative z-10">💬</span>
+          <div className={`flex-1 flex flex-col items-center justify-center h-full md:rounded-2xl border shadow-2xl text-center p-8
+            ${isDark ? 'bg-[#161b27]/90 border-white/6 backdrop-blur-xl' : 'bg-white/90 border-black/6 backdrop-blur-xl'}`}>
+            <div className="relative mb-6">
+              <div className="w-20 h-20 rounded-[24px] bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-2xl shadow-blue-900/40">
+                <div className="absolute inset-0 rounded-[24px] bg-gradient-to-tr from-white/10 to-transparent" />
+                <span className="text-4xl z-10 relative">💬</span>
               </div>
-              <div className={`absolute -inset-2 rounded-[36px] -z-10 blur-xl opacity-40 bg-gradient-to-tr from-blue-600 to-indigo-500`} />
+              <div className="absolute -inset-3 -z-10 rounded-[32px] blur-xl bg-gradient-to-tr from-blue-600 to-indigo-500 opacity-30" />
             </div>
-            <h2 className={`text-3xl sm:text-4xl font-black mb-3 bg-clip-text text-transparent bg-gradient-to-r ${isDark ? 'from-white to-slate-400' : 'from-slate-800 to-slate-500'}`}>
+            <h2 className={`text-2xl font-black mb-2 bg-clip-text text-transparent bg-gradient-to-r ${isDark ? 'from-white to-slate-400' : 'from-slate-800 to-slate-500'}`}>
               Chat App
             </h2>
-            <p className={`text-sm sm:text-base max-w-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-              Select a friend and start chatting
+            <p className={`text-sm max-w-xs font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              Select a friend and start chatting 💬
             </p>
           </div>
         )}
