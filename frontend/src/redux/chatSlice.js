@@ -48,13 +48,24 @@ const chatSlice = createSlice({
         }
         state.unreadCounts[senderId] += 1;
       }
+    },
+    updateMessageStatus(state, action) {
+      // Mark all messages from a sender as 'read' in local state
+      const { senderId } = action.payload;
+      state.messages = state.messages.map(msg => {
+        const msgSenderId = typeof msg.sender === 'object' ? msg.sender._id : msg.sender;
+        if (msgSenderId === senderId && msg.status !== 'read') {
+          return { ...msg, status: 'read' };
+        }
+        return msg;
+      });
     }
   },
 });
 
 export const { 
   setFriends, setMessages, setActiveChat, addMessage, 
-  setOnlineUsers, addTypingUser, removeTypingUser, incrementUnread 
+  setOnlineUsers, addTypingUser, removeTypingUser, incrementUnread, updateMessageStatus
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

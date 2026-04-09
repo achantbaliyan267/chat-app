@@ -1,6 +1,23 @@
 const User = require("../models/User");
 const Message = require("../models/Message");
 
+// Mark all messages from a user as read
+exports.markMessagesRead = async (req, res) => {
+  try {
+    const senderId = req.params.senderId;
+    const currentUserId = req.user;
+
+    await Message.updateMany(
+      { sender: senderId, reciver: currentUserId, status: { $ne: "read" } },
+      { $set: { status: "read" } }
+    );
+
+    return res.json({ message: "Messages marked as read" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 exports.sendMessage = async (req, res) => {
   try {
     // Get the reciverId from the request parameters and senderId from the authenticated user
