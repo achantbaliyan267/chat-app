@@ -14,6 +14,7 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -42,6 +43,20 @@ const Login = () => {
       setError(err.response?.data?.message || err.message || "An error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setError("");
+    setGuestLoading(true);
+    try {
+      const { data } = await API.post("/auth/guest-login");
+      dispatch(setUser({ user: data.user, token: data.token }));
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to join as guest");
+    } finally {
+      setGuestLoading(false);
     }
   };
 
@@ -99,7 +114,36 @@ const Login = () => {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-slate-400">
+        {/* Divider */}
+        <div className="flex items-center gap-3 my-2">
+          <div className="flex-1 h-px bg-slate-800" />
+          <span className="text-slate-600 text-xs font-semibold">OR</span>
+          <div className="flex-1 h-px bg-slate-800" />
+        </div>
+
+        {/* Guest Login */}
+        <button
+          onClick={handleGuestLogin}
+          disabled={guestLoading}
+          className="w-full py-3.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-slate-300 hover:text-white font-bold rounded-xl transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {guestLoading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-slate-400/40 border-t-slate-300 rounded-full animate-spin" />
+              Joining...
+            </>
+          ) : (
+            <>
+              <span className="text-lg">👤</span>
+              Continue as Guest
+            </>
+          )}
+        </button>
+        <p className="text-center text-xs text-slate-600">
+          Guest accounts are temporary (24h) · No signup needed
+        </p>
+
+        <p className="mt-4 text-center text-sm text-slate-400">
           Don't have an account?{" "}
           <Link to="/signup" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
             Create one

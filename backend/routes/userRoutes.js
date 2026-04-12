@@ -9,6 +9,8 @@ const {
   getFriendRequests,
   getFriendsList,
   uploadProfilePic,
+  getProfile,
+  updateProfile,
 } = require("../controllers/userController");
 
 const protect = require("../middleware/authMiddleware");
@@ -33,5 +35,11 @@ router.get("/friends", protect, getFriendsList);
 
 // Profile pic route
 router.put("/profile-pic", protect, uploadProfilePic);
+
+// Get profile route
+router.get("/profile", protect, getProfile);
+
+// Update profile route
+router.put("/profile", protect, updateProfile);
 
 module.exports = router;

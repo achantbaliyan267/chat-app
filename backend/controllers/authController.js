@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 // Register User
 exports.signup = async (req, res) => {
@@ -98,3 +99,45 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+// Guest Login - creates a temporary guest user with unique ID
+exports.guestLogin = async (req, res) => {
+  try {
+    const guestId = crypto.randomUUID().replace(/-/g, "").slice(0, 12);
+    const guestUsername = `guest_${guestId}`;
+    const guestName = `Guest ${guestId.slice(0, 6).toUpperCase()}`;
+    const guestEmail = `${guestUsername}@guest.chatapp.local`;
+    const guestPhone = "0000000000";
+
+    // Create a random password for the guest
+    const randomPass = crypto.randomBytes(32).toString("hex");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(randomPass, salt);
+
+    const user = await User.create({
+      name: guestName,
+      username: guestUsername,
+      email: guestEmail,
+      phone: guestPhone,
+      password: hashedPassword,
+      isGuest: true,
+    });
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    return res.status(201).json({
+      token,
+      user: userObj,
+      message: "Joined as Guest",
+    });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

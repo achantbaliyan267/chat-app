@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { setFriends, setActiveChat } from "../redux/chatSlice";
-import { setUser, logout } from "../redux/authSlice";
+import { logout } from "../redux/authSlice";
 
 const Avatar = ({ user, size = "md", isDark, showOnline = false, isOnline = false }) => {
   const sizes = { sm: "w-9 h-9 text-sm", md: "w-11 h-11 text-base", lg: "w-13 h-13 text-lg" };
@@ -34,8 +34,6 @@ const Sidebar = ({ theme, setTheme }) => {
   const [requests, setRequests]   = useState([]);
   const [loadingAction, setLoadingAction] = useState(null);
   const [searchQuery, setSearchQuery]     = useState("");
-  const fileInputRef = useRef(null);
-
   const fetchContactData = async () => {
     try {
       const [{ data: fr }, { data: au }, { data: rq }] = await Promise.all([
@@ -66,20 +64,6 @@ const Sidebar = ({ theme, setTheme }) => {
   };
 
   const handleLogout = () => { dispatch(logout()); navigate("/login"); };
-
-  const handleProfilePicUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { alert("Max 2MB"); return; }
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      try {
-        const { data } = await API.put("/users/profile-pic", { profilePic: reader.result });
-        dispatch(setUser({ user: data, token: localStorage.getItem("token") }));
-      } catch { alert("Failed to upload"); }
-    };
-    reader.readAsDataURL(file);
-  };
 
   const getDisplayData = () => {
     const friendIds = friends.map(f => f._id);
@@ -258,29 +242,29 @@ const Sidebar = ({ theme, setTheme }) => {
         <div className={`absolute bottom-0 left-0 right-0 flex items-center justify-between px-4 py-3 border-t z-20 backdrop-blur-xl
           ${isDark ? "bg-slate-900/95 border-white/8" : "bg-white/95 border-black/6"}`}>
           
-          {/* Avatar + name */}
-          <div className="flex items-center gap-3 min-w-0">
+          {/* Avatar + name → navigates to profile */}
+          <div
+            className="flex items-center gap-3 min-w-0 cursor-pointer group/profile"
+            onClick={() => navigate("/profile")}
+            title="View Profile"
+          >
             <div
-              onClick={() => fileInputRef.current?.click()}
-              className="relative cursor-pointer group shrink-0"
-              title="Change profile photo"
+              className="relative shrink-0"
             >
-              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleProfilePicUpload} />
               {currentUser.profilePic
-                ? <img src={currentUser.profilePic} className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-blue-500 transition-all" alt="" />
-                : <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover:ring-blue-500 transition-all">
+                ? <img src={currentUser.profilePic} className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover/profile:ring-blue-500 transition-all" alt="" />
+                : <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover/profile:ring-blue-500 transition-all">
                     {currentUser.name?.charAt(0).toUpperCase()}
                   </div>
               }
-              <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover/profile:opacity-100 transition-opacity flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
               </div>
             </div>
             <div className="min-w-0">
-              <p className={`font-bold text-sm truncate ${isDark ? "text-white" : "text-slate-900"}`}>{currentUser.name}</p>
+              <p className={`font-bold text-sm truncate group-hover/profile:text-blue-400 transition-colors ${isDark ? "text-white" : "text-slate-900"}`}>{currentUser.name}</p>
               <p className="text-[11px] font-medium text-emerald-400 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block animate-pulse" /> Active now
               </p>

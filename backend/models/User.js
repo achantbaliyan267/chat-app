@@ -39,6 +39,17 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 200,
+    },
+
+    isGuest: {
+      type: Boolean,
+      default: false,
+    },
+
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,

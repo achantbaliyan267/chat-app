@@ -219,6 +219,45 @@ exports.getFriendsList = async (req, res) => {
   }
 };
 
+// Get current user profile
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    return res.json(user);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+// Update profile details
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, username, phone, bio } = req.body;
+    const userId = req.user;
+
+    // Check if username already taken by someone else
+    if (username) {
+      const existing = await User.findOne({ username, _id: { $ne: userId } });
+      if (existing) {
+        return res.status(400).json({ message: "Username already taken" });
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { name, username, phone, bio },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+    return res.json(updatedUser);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 exports.uploadProfilePic = async (req, res) => {
   try {
     const userId = req.user;
